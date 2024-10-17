@@ -1,1 +1,571 @@
+R Programming Tutorial: A Step-by-Step Guide
 
+R is a powerful language used for statistical computing, data analysis, and graphical representation. This tutorial will guide you through the basics of R programming.
+
+
+---
+
+1. Introduction to R
+
+R is a programming language and free software environment for statistical computing and graphics supported by the R Foundation. It is widely used among statisticians and data miners for developing statistical software and performing data analysis.
+
+1.1 Installing R and RStudio
+
+R: Download from the official R Project website.
+
+RStudio: It is an IDE (Integrated Development Environment) for R. Download it from RStudio's website.
+
+
+
+---
+
+2. Basic Syntax
+
+2.1 R as a Calculator
+
+R can perform basic arithmetic calculations:
+
+# Basic operations
+2 + 3    # Addition
+7 - 4    # Subtraction
+6 * 3    # Multiplication
+8 / 2    # Division
+5 ^ 2    # Exponentiation
+10 %% 3  # Modulo (remainder)
+
+2.2 Variables
+
+You can store data in variables for later use:
+
+x <- 5    # Assign 5 to variable x
+y <- 10   # Assign 10 to variable y
+
+# Display variables
+x
+y
+
+2.3 Comments
+
+Comments in R are made with #:
+
+# This is a comment
+
+
+---
+
+3. Data Types
+
+3.1 Numeric, Integer, and Logical Types
+
+# Numeric
+num <- 12.5
+is.numeric(num)
+
+# Integer
+int <- 5L  # The 'L' tells R to store it as an integer
+is.integer(int)
+
+# Logical
+bool <- TRUE
+is.logical(bool)
+
+3.2 Character Strings
+
+str <- "Hello, R!"
+is.character(str)
+
+
+---
+
+4. Data Structures in R
+
+4.1 Vectors
+
+Vectors are sequences of data elements of the same basic type.
+
+# Create a numeric vector
+v <- c(1, 2, 3, 4, 5)
+v
+
+# Access elements
+v[2]  # Returns the second element
+
+# Operations on vectors
+v + 2  # Adds 2 to each element in the vector
+
+4.2 Matrices
+
+Matrices are two-dimensional arrays.
+
+# Create a 2x3 matrix
+m <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, ncol = 3)
+m
+
+# Access elements
+m[1, 2]  # Element in the first row, second column
+
+4.3 Data Frames
+
+Data frames are like tables in R where each column can contain different types of data.
+
+# Create a data frame
+df <- data.frame(Name = c("John", "Sara"),
+                 Age = c(25, 30),
+                 Gender = c("M", "F"))
+df
+
+# Access columns and rows
+df$Name  # Access Name column
+df[1, ]  # Access the first row
+
+4.4 Lists
+
+Lists can contain different types of objects.
+
+# Create a list
+lst <- list(Name = "John", Age = 25, Scores = c(90, 85, 88))
+lst
+
+# Access elements
+lst$Scores  # Access Scores element
+
+
+---
+
+5. Control Structures
+
+5.1 If-Else Statements
+
+x <- 5
+if (x > 3) {
+  print("x is greater than 3")
+} else {
+  print("x is less than or equal to 3")
+}
+
+5.2 For Loop
+
+for (i in 1:5) {
+  print(i)
+}
+
+5.3 While Loop
+
+x <- 1
+while (x <= 5) {
+  print(x)
+  x <- x + 1
+}
+
+
+---
+
+6. Functions
+
+R allows you to write your own functions.
+
+# Define a function
+add_numbers <- function(a, b) {
+  return(a + b)
+}
+
+# Call the function
+add_numbers(5, 10)
+
+
+---
+
+7. Apply Functions
+
+R provides various "apply" functions that allow you to apply a function to elements of a data structure.
+
+7.1 lapply()
+
+Applies a function to each element of a list.
+
+lst <- list(a = 1:5, b = 6:10)
+lapply(lst, mean)
+
+7.2 sapply()
+
+Similar to lapply() but returns a simplified result (e.g., a vector or matrix).
+
+sapply(lst, mean)
+
+
+---
+
+8. Reading and Writing Data
+
+8.1 Reading from a CSV File
+
+data <- read.csv("data.csv")
+head(data)  # Display the first few rows
+
+8.2 Writing to a CSV File
+
+write.csv(data, "output.csv")
+
+
+---
+
+9. Plotting and Visualization
+
+R provides powerful visualization tools. The base R plotting functions can be used for simple plots, but libraries like ggplot2 offer advanced visualization capabilities.
+
+9.1 Base Plotting
+
+# Scatter plot
+x <- c(1, 2, 3, 4, 5)
+y <- c(2, 4, 6, 8, 10)
+plot(x, y, type = "p", col = "blue")
+
+9.2 Using ggplot2
+
+First, install the ggplot2 package:
+
+install.packages("ggplot2")
+
+# Load ggplot2
+library(ggplot2)
+
+# Create a scatter plot
+ggplot(data = mtcars, aes(x = mpg, y = hp)) +
+  geom_point()
+
+
+---
+
+10. Packages
+
+10.1 Installing a Package
+
+R has a large collection of packages for various tasks.
+
+# Install a package
+install.packages("dplyr")
+
+10.2 Loading a Package
+
+# Load a package
+library(dplyr)
+
+
+---
+
+11. Advanced Topics
+
+11.1 Data Manipulation with dplyr
+
+The dplyr package is a fast and consistent tool for data manipulation.
+
+library(dplyr)
+
+# Filter data
+filtered_data <- mtcars %>% filter(mpg > 20)
+
+# Select columns
+selected_data <- mtcars %>% select(mpg, hp)
+
+11.2 Handling Missing Data
+
+# Check for missing values
+is.na(data)
+
+# Remove rows with missing data
+clean_data <- na.omit(data)
+
+
+---
+
+12. Statistical Analysis
+
+R is widely used for statistical analysis. Some common functions include:
+
+12.1 Summary Statistics
+
+# Mean, median, variance
+mean(mtcars$mpg)
+median(mtcars$hp)
+var(mtcars$wt)
+
+12.2 Linear Regression
+
+# Simple linear regression
+model <- lm(mpg ~ hp, data = mtcars)
+summary(model)
+
+
+---
+
+Sure! Let’s explore some more advanced topics in R programming that extend beyond the basics. We’ll dive into statistical modeling, machine learning, advanced data manipulation, and working with big data.
+
+
+---
+
+14. Advanced Data Manipulation
+
+The dplyr and tidyr packages are part of the tidyverse, a collection of packages designed for data science.
+
+14.1 Pipelines (%>%) with dplyr
+
+The %>% operator, often called the pipe, is used to pass the output of one function into another.
+
+library(dplyr)
+
+# Example: Filter rows, select columns, and compute the mean of a column
+result <- mtcars %>%
+  filter(cyl == 6) %>%
+  select(mpg, hp) %>%
+  summarise(mean_mpg = mean(mpg))
+result
+
+14.2 Data Reshaping with tidyr
+
+tidyr is used for data tidying, i.e., converting messy data into a tidy format (where each variable is a column and each observation is a row).
+
+library(tidyr)
+
+# Gather: Reshape wide data into long data
+long_data <- pivot_longer(mtcars, cols = mpg:hp, names_to = "variable", values_to = "value")
+head(long_data)
+
+# Spread: Reshape long data into wide data
+wide_data <- pivot_wider(long_data, names_from = variable, values_from = value)
+head(wide_data)
+
+14.3 Joining Datasets
+
+You can join multiple data frames using dplyr functions like inner_join, left_join, right_join, and full_join.
+
+data1 <- data.frame(ID = c(1, 2, 3), Score1 = c(90, 85, 88))
+data2 <- data.frame(ID = c(1, 2, 4), Score2 = c(75, 80, 70))
+
+# Perform left join
+joined_data <- left_join(data1, data2, by = "ID")
+joined_data
+
+
+---
+
+15. Statistical Modeling and Hypothesis Testing
+
+15.1 t-Test
+
+A t-test is used to compare the means of two groups.
+
+# Perform a t-test
+t.test(mpg ~ am, data = mtcars)  # mpg by transmission type (am)
+
+15.2 Chi-Square Test
+
+A chi-square test is used to test the independence of two categorical variables.
+
+# Create a contingency table
+table <- table(mtcars$cyl, mtcars$am)
+
+# Perform chi-square test
+chisq.test(table)
+
+15.3 ANOVA (Analysis of Variance)
+
+ANOVA tests if the means of several groups are equal.
+
+# One-way ANOVA
+anova_model <- aov(mpg ~ cyl, data = mtcars)
+summary(anova_model)
+
+15.4 Linear Regression
+
+Linear regression models the relationship between two variables by fitting a linear equation to observed data.
+
+# Simple linear regression
+model <- lm(mpg ~ hp, data = mtcars)
+summary(model)
+
+# Plot regression line
+plot(mtcars$hp, mtcars$mpg)
+abline(model)
+
+15.5 Logistic Regression
+
+Logistic regression is used when the dependent variable is categorical.
+
+# Logistic regression example
+logistic_model <- glm(am ~ mpg + hp, data = mtcars, family = binomial)
+summary(logistic_model)
+
+
+---
+
+16. Machine Learning with R
+
+R is equipped with powerful machine learning libraries such as caret, randomForest, and e1071. Here's an overview of some machine learning techniques.
+
+16.1 Classification with Decision Trees
+
+# Load required library
+library(rpart)
+
+# Train a decision tree model
+tree_model <- rpart(Species ~ ., data = iris)
+
+# Plot the tree
+plot(tree_model)
+text(tree_model, use.n = TRUE)
+
+16.2 Random Forest
+
+Random forest is an ensemble method that grows many decision trees and combines them.
+
+library(randomForest)
+
+# Train a random forest model
+rf_model <- randomForest(Species ~ ., data = iris)
+print(rf_model)
+
+16.3 K-Means Clustering
+
+K-means clustering is used for unsupervised learning to group similar data points.
+
+# Perform K-means clustering
+set.seed(123)
+kmeans_model <- kmeans(iris[, 1:4], centers = 3)
+kmeans_model$centers
+
+# Plot clusters
+library(ggplot2)
+ggplot(iris, aes(Petal.Length, Petal.Width, color = factor(kmeans_model$cluster))) +
+  geom_point() +
+  labs(title = "K-Means Clustering")
+
+16.4 Support Vector Machines (SVM)
+
+Support Vector Machines are supervised learning models used for classification and regression.
+
+library(e1071)
+
+# Train an SVM model
+svm_model <- svm(Species ~ ., data = iris)
+summary(svm_model)
+
+
+---
+
+17. Working with Big Data
+
+17.1 Handling Large Datasets with data.table
+
+The data.table package is optimized for large datasets.
+
+library(data.table)
+
+# Load data
+dt <- fread("large_dataset.csv")
+
+# View first few rows
+head(dt)
+
+# Filter and summarize data
+filtered_dt <- dt[age > 30, .(avg_income = mean(income)), by = gender]
+
+17.2 Parallel Computing with R
+
+Parallel computing helps improve the efficiency of code by running operations simultaneously on multiple processors.
+
+library(parallel)
+
+# Number of available cores
+no_cores <- detectCores() - 1
+
+# Parallel apply using mclapply
+result <- mclapply(1:10, function(x) x^2, mc.cores = no_cores)
+
+
+---
+
+18. Time Series Analysis
+
+18.1 Plotting Time Series Data
+
+# Load the built-in AirPassengers dataset
+data(AirPassengers)
+
+# Plot the time series
+plot(AirPassengers, main = "AirPassengers Data", ylab = "Passengers", xlab = "Time")
+
+18.2 Decomposing Time Series
+
+You can decompose a time series into trend, seasonal, and irregular components.
+
+# Decompose the time series
+decomposed <- decompose(AirPassengers)
+plot(decomposed)
+
+18.3 ARIMA Models
+
+ARIMA (Auto-Regressive Integrated Moving Average) is a popular model for time series forecasting.
+
+library(forecast)
+
+# Fit ARIMA model
+arima_model <- auto.arima(AirPassengers)
+
+# Forecast the next 12 periods
+forecasted <- forecast(arima_model, h = 12)
+plot(forecasted)
+
+
+---
+
+19. Shiny: Building Interactive Web Applications
+
+Shiny allows you to create interactive web applications with R.
+
+19.1 Basic Shiny App
+
+library(shiny)
+
+# Define UI
+ui <- fluidPage(
+  titlePanel("Basic Shiny App"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("num", "Choose a number:", 1, 100, 50)
+    ),
+    mainPanel(
+      textOutput("result")
+    )
+  )
+)
+
+# Define server logic
+server <- function(input, output) {
+  output$result <- renderText({
+    paste("You selected the number:", input$num)
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+
+---
+
+20. R Markdown for Reporting
+
+R Markdown allows you to integrate code with narrative text for dynamic, reproducible reports.
+
+# Example R Markdown Code Chunk
+```{r}
+summary(mtcars)
+
+You can generate reports in formats like HTML, PDF, or Word.
+
+---
+
+### Conclusion
+
+This extended R tutorial covers a variety of topics from advanced data manipulation to machine learning, big data handling, time series analysis, and creating interactive applications. R is a versatile tool, and by diving into these advanced areas, you can unlock its full potential for data science, statistical analysis, and more.
+
+Let me know if you’d like to explore any particular area further or dive deeper into specific functions or concepts!

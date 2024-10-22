@@ -108,7 +108,64 @@ head(data)  # View the first few rows
 # Write data to a CSV file
 write.csv(data, "output.csv")
 ```
+Sure! Let’s generate some sample sales data and create a scatter plot using both Base R and `ggplot2`. 
 
+### Generating Sample Sales Data
+
+First, we'll create a dataset that simulates sales data. Let's assume we have sales figures over different advertising budgets.
+
+```r
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate sample data
+n <- 100  # Number of samples
+advertising_budget <- runif(n, 1000, 10000)  # Random advertising budget
+sales <- 500 + 0.5 * advertising_budget + rnorm(n, mean = 0, sd = 200)  # Sales with some noise
+
+# Create a data frame
+sales_data <- data.frame(advertising_budget, sales)
+```
+
+### Base R Scatter Plot
+
+Now we’ll create a scatter plot using Base R:
+
+```r
+# Base R Scatter Plot
+plot(x = sales_data$advertising_budget, 
+     y = sales_data$sales, 
+     main = "Sales vs Advertising Budget", 
+     xlab = "Advertising Budget", 
+     ylab = "Sales", 
+     col = "blue", 
+     pch = 19)
+abline(lm(sales ~ advertising_budget, data = sales_data), col = "red")  # Add a regression line
+```
+
+### ggplot2 Scatter Plot
+
+Next, we’ll use `ggplot2` to create a more polished scatter plot:
+
+```r
+# Load ggplot2
+library(ggplot2)
+
+# ggplot2 Scatter Plot
+ggplot(sales_data, aes(x = advertising_budget, y = sales)) +
+  geom_point(color = "blue", size = 2) +  # Points
+  geom_smooth(method = "lm", color = "red") +  # Linear regression line
+  labs(title = "Sales vs Advertising Budget", 
+       x = "Advertising Budget", 
+       y = "Sales") +
+  theme_minimal()  # Clean theme
+```
+
+### Summary
+
+These plots visualize the relationship between advertising budget and sales. The scatter plot provides insights into how sales increase with the advertising budget, and the regression line gives a clear indication of the trend. 
+
+Feel free to run this code in your R environment!
 ### 8. Visualization
 
 #### **Base R Plots:**

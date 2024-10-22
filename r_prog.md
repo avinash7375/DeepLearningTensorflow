@@ -111,28 +111,92 @@ write.csv(data, "output.csv")
 
 ### 8. Visualization
 
-* **Base R Plots:** Create basic plots like scatter plots, histograms, and bar charts.
-* **ggplot2 Package:** Offers a more powerful and customizable plotting system (install with `install.packages("ggplot2")`).
+#### **Base R Plots:**
 
-```R
-## R Programming: A Basic to Intermediate Guide (Continued)
+Base R provides simple plotting functions that are easy to use for quick visualizations. Here are some common plot types:
 
-This guide provides a foundation for R programming. We'll delve deeper into some key areas:
+1. **Scatter Plot:**
+   ```r
+   # Basic scatter plot of Sepal Length vs Sepal Width
+   plot(x = iris$Sepal.Length, y = iris$Sepal.Width, 
+        main = "Sepal Length vs Width", 
+        xlab = "Sepal Length", 
+        ylab = "Sepal Width", 
+        col = iris$Species,  # Color by species
+        pch = 19)  # Point type
+   legend("topright", legend = levels(iris$Species), 
+          col = 1:3, pch = 19)
+   ```
 
-### 8\. Visualization (Continued)
+2. **Histogram:**
+   ```r
+   # Histogram of Sepal Length
+   hist(iris$Sepal.Length, 
+        main = "Distribution of Sepal Length", 
+        xlab = "Sepal Length", 
+        col = "lightblue", 
+        border = "black")
+   ```
 
-**Base R Plots:**
+3. **Bar Chart:**
+   ```r
+   # Bar chart of Species counts
+   species_count <- table(iris$Species)
+   barplot(species_count, 
+           main = "Count of Each Species", 
+           xlab = "Species", 
+           ylab = "Count", 
+           col = "lightgreen")
+   ```
+
+#### **ggplot2 Package:**
+
+The `ggplot2` package allows for more sophisticated and customizable visualizations. To get started, ensure you have it installed:
 
 ```r
-# Example: Scatter plot
-plot(x = iris$Sepal.Length, y = iris$Sepal.Width, main = "Sepal Length vs Width")
+install.packages("ggplot2")
 ```
 
-**ggplot2 Package:**
+Here are some examples of how to create various plots using `ggplot2`:
 
-  - Create complex and visually appealing plots with a focus on grammar of graphics.
-  - Explore resources like the ggplot2 documentation ([https://ggplot2.tidyverse.org/](https://www.google.com/url?sa=E&source=gmail&q=https://ggplot2.tidyverse.org/)) and online tutorials for in-depth usage.
+1. **Scatter Plot:**
+   ```r
+   library(ggplot2)
 
+   ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+     geom_point(size = 3) +  # Adjust point size
+     labs(title = "Sepal Length vs Width", 
+          x = "Sepal Length", 
+          y = "Sepal Width") +
+     theme_minimal()  # Use a minimal theme
+   ```
+
+2. **Histogram:**
+   ```r
+   ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
+     geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity") +
+     labs(title = "Distribution of Sepal Length", 
+          x = "Sepal Length", 
+          y = "Count") +
+     theme_classic()
+   ```
+
+3. **Bar Chart:**
+   ```r
+   ggplot(iris, aes(x = Species)) +
+     geom_bar(fill = "lightblue") +
+     labs(title = "Count of Each Species", 
+          x = "Species", 
+          y = "Count") +
+     theme_light()
+   ```
+
+### Resources for Further Learning:
+- **ggplot2 Documentation:** [ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/)
+- **Online Tutorials:** Platforms like DataCamp, Coursera, or free resources on GitHub offer comprehensive courses on R and `ggplot2`.
+- **Books:** Consider "R for Data Science" by Hadley Wickham for an in-depth understanding of `ggplot2`.
+
+This guide should help you get started with both Base R and `ggplot2` for visualizing your data effectively!
 ### 9\. Data Wrangling
 
   * **Data Cleaning:** Handle missing values, outliers, and inconsistencies.

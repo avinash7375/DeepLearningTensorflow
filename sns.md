@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 To load your CSV file, use `pandas.read_csv()`. Replace `"your_file.csv"` with the path to your file:
 ```python
 # Load the dataset
-data = pd.read_csv("your_file.csv")
+data = pd.read_csv("sales_data.csv")
 
 # Check the first few rows of the dataset
 data.head()

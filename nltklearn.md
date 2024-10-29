@@ -1,5 +1,3 @@
----
-
 ### Tutorial 1: Introduction to NLTK and Basic Text Processing
 
 #### 1. Setting Up NLTK
@@ -29,7 +27,7 @@
      filtered_words = [w for w in words if w.lower() not in stop_words]
      ```
 
----
+
 
 ### Tutorial 2: Text Normalization
 

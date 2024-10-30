@@ -426,3 +426,44 @@ shinyApp(ui, server)
 Remember to explore additional packages and resources to expand your R programming skills.
 
 
+## Code for practice
+
+```r
+
+
+print(head(data))
+# Load necessary libraries
+library(ggplot2)
+
+data <- read.csv("sales_data.csv")
+# Set up the plotting area with multiple plots
+par(mfrow=c(2, 2))
+
+# Scatterplot 1: Sales vs Quantity
+ggplot(data, aes(x = Quantity, y = Sales, color = Category)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Sales vs Quantity") +
+  theme_minimal()
+
+# Scatterplot 2: Sales vs Discount
+ggplot(data, aes(x = Discount, y = Sales, color = Region)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Sales vs Discount") +
+  theme_minimal()
+
+# Scatterplot 3: Quantity vs Discount
+ggplot(data, aes(x = Quantity, y = Discount, color = Product)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Quantity vs Discount") +
+  theme_minimal()
+
+# Scatterplot 4: Discount vs Sales with Size based on Quantity
+ggplot(data, aes(x = Discount, y = Sales, size = Quantity, color = Region)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Discount vs Sales with Quantity as Size") +
+  theme_minimal() +
+  scale_size(range = c(2, 10))
+
+# Restore default single plot layout
+par(mfrow=c(1, 1))
+```

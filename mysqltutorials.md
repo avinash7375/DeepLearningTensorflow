@@ -181,16 +181,287 @@ WHERE student_id = 2;
 
 This command deletes the student with `student_id` 2 from the `Students` table.
 
+### 8. **Alter Table**
+
+The `ALTER TABLE` command allows you to modify the structure of an existing table, such as adding, removing, or changing columns.
+
+#### Add a Column
+
+```sql
+ALTER TABLE Students
+ADD phone_number VARCHAR(20);
+```
+
+This command adds a new column `phone_number` to the `Students` table.
+
+#### Modify a Column
+
+You can change the definition of an existing column, for example, changing the data type of `phone_number` from `VARCHAR(20)` to `VARCHAR(30)`.
+
+```sql
+ALTER TABLE Students
+MODIFY phone_number VARCHAR(30);
+```
+
+#### Drop a Column
+
+To remove a column from a table:
+
+```sql
+ALTER TABLE Students
+DROP COLUMN phone_number;
+```
+
+#### Rename a Column
+
+```sql
+ALTER TABLE Students
+RENAME COLUMN email TO student_email;
+```
+
+---
+
+### 9. **Dropping a Table**
+
+If you no longer need a table, you can remove it using the `DROP TABLE` command.
+
+#### Command: `DROP TABLE`
+
+```sql
+DROP TABLE Enrollments;
+```
+
+This command deletes the `Enrollments` table and all of its data permanently. **Be cautious** when using `DROP` as it cannot be undone.
+
+---
+
+### 10. **Indexing**
+
+An index in SQL is used to speed up query execution. It is particularly useful for columns that are frequently searched or used in join conditions. While creating an index may improve read performance, it can degrade write performance (due to the additional work involved in updating the index).
+
+#### Creating an Index
+
+```sql
+CREATE INDEX idx_lastname ON Students(last_name);
+```
+
+This creates an index on the `last_name` column of the `Students` table. Now, searches based on `last_name` will be faster.
+
+#### Dropping an Index
+
+To remove an index, you can use the `DROP INDEX` command.
+
+```sql
+DROP INDEX idx_lastname;
+```
+
+Note that the syntax for dropping an index may vary slightly depending on the database system (e.g., MySQL, PostgreSQL, SQL Server).
+
+---
+
+### 11. **Constraints**
+
+Constraints are rules that help ensure the integrity of data in your database. We already touched on **Primary Keys** and **Foreign Keys**, but here are some more common constraints.
+
+#### NOT NULL
+
+A `NOT NULL` constraint ensures that a column cannot have a `NULL` value.
+
+```sql
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,   -- Name cannot be NULL
+    department VARCHAR(50)        -- Department can be NULL
+);
+```
+
+#### UNIQUE
+
+The `UNIQUE` constraint ensures that all values in a column are distinct.
+
+```sql
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE   -- Email must be unique
+);
+```
+
+#### CHECK
+
+The `CHECK` constraint ensures that the values in a column meet a specific condition.
+
+```sql
+CREATE TABLE Products (
+    product_id INT PRIMARY KEY,
+    price DECIMAL(10, 2),
+    CHECK (price > 0)   -- Price must be greater than 0
+);
+```
+
+#### DEFAULT
+
+The `DEFAULT` constraint is used to provide a default value for a column if no value is specified during an `INSERT`.
+
+```sql
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    order_date DATE DEFAULT CURRENT_DATE   -- Default to the current date
+);
+```
+
+---
+
+### 12. **Joins**
+
+In SQL, joins are used to combine rows from two or more tables based on a related column. Here are the most common types of joins:
+
+#### INNER JOIN
+
+The `INNER JOIN` returns only the rows where there is a match in both tables.
+
+```sql
+SELECT Students.first_name, Students.last_name, Courses.course_name
+FROM Students
+INNER JOIN Enrollments ON Students.student_id = Enrollments.student_id
+INNER JOIN Courses ON Enrollments.course_id = Courses.course_id;
+```
+
+This query returns a list of students along with the courses they are enrolled in.
+
+#### LEFT JOIN (or LEFT OUTER JOIN)
+
+The `LEFT JOIN` returns all rows from the left table (in this case, `Students`) and the matching rows from the right table (`Courses`). If there’s no match, the result will contain `NULL` for the right table’s columns.
+
+```sql
+SELECT Students.first_name, Students.last_name, Courses.course_name
+FROM Students
+LEFT JOIN Enrollments ON Students.student_id = Enrollments.student_id
+LEFT JOIN Courses ON Enrollments.course_id = Courses.course_id;
+```
+
+This will return all students, including those who are not enrolled in any courses (in which case `course_name` will be `NULL`).
+
+#### RIGHT JOIN (or RIGHT OUTER JOIN)
+
+The `RIGHT JOIN` is the opposite of the `LEFT JOIN` — it returns all rows from the right table (e.g., `Courses`) and the matching rows from the left table (e.g., `Students`). If no match exists, `NULL` values will appear for the left table's columns.
+
+```sql
+SELECT Students.first_name, Students.last_name, Courses.course_name
+FROM Students
+RIGHT JOIN Enrollments ON Students.student_id = Enrollments.student_id
+RIGHT JOIN Courses ON Enrollments.course_id = Courses.course_id;
+```
+
+#### FULL OUTER JOIN
+
+A `FULL OUTER JOIN` returns all rows when there is a match in either the left or right table. Rows with no match will have `NULL` values for the non-matching side.
+
+```sql
+SELECT Students.first_name, Students.last_name, Courses.course_name
+FROM Students
+FULL OUTER JOIN Enrollments ON Students.student_id = Enrollments.student_id
+FULL OUTER JOIN Courses ON Enrollments.course_id = Courses.course_id;
+```
+
+---
+
+### 13. **Group By and Aggregate Functions**
+
+SQL provides aggregate functions like `COUNT()`, `SUM()`, `AVG()`, `MAX()`, and `MIN()` to perform calculations on data. You often use these functions in combination with the `GROUP BY` clause.
+
+#### COUNT
+
+```sql
+SELECT COUNT(*) AS total_students FROM Students;
+```
+
+This returns the total number of students in the `Students` table.
+
+#### SUM
+
+```sql
+SELECT course_id, SUM(credits) AS total_credits
+FROM Courses
+GROUP BY course_id;
+```
+
+This query calculates the total number of credits for each course.
+
+#### AVG
+
+```sql
+SELECT AVG(price) AS average_price
+FROM Products;
+```
+
+This returns the average price of all products in the `Products` table.
+
+#### GROUP BY
+
+The `GROUP BY` statement groups rows that have the same values into summary rows, like "total" or "average" calculations.
+
+```sql
+SELECT student_id, COUNT(course_id) AS total_courses
+FROM Enrollments
+GROUP BY student_id;
+```
+
+This query gives the number of courses each student is enrolled in.
+
+---
+
+### 14. **HAVING Clause**
+
+The `HAVING` clause is used to filter records after the `GROUP BY` has been applied. It is similar to the `WHERE` clause but works with grouped data.
+
+```sql
+SELECT student_id, COUNT(course_id) AS total_courses
+FROM Enrollments
+GROUP BY student_id
+HAVING COUNT(course_id) > 2;
+```
+
+This query returns the students who are enrolled in more than 2 courses.
+
+---
+
+### 15. **Subqueries**
+
+A subquery is a query inside another query. Subqueries can be used in the `WHERE`, `FROM`, or `SELECT` clauses.
+
+#### Subquery in WHERE Clause
+
+```sql
+SELECT first_name, last_name
+FROM Students
+WHERE student_id IN (SELECT student_id FROM Enrollments WHERE course_id = 101);
+```
+
+This query returns the names of students who are enrolled in the course with `course_id` 101.
+
+#### Subquery in FROM Clause
+
+```sql
+SELECT subquery.student_id, subquery.total_courses
+FROM (SELECT student_id, COUNT(course_id) AS total_courses
+      FROM Enrollments
+      GROUP BY student_id) AS subquery
+WHERE subquery.total_courses > 2;
+```
+
+This query returns students who are enrolled in more than 2 courses, using a subquery in the `FROM` clause.
+
 ---
 
 ### Conclusion
 
-In this tutorial, we covered the following concepts and SQL commands:
+In this extended SQL tutorial, we covered several advanced SQL commands and concepts, including:
 
-- **Creating a database** with `CREATE DATABASE`
-- **Creating tables** with `CREATE TABLE` and defining columns, including primary keys
-- **Inserting data** into tables with `INSERT INTO`
-- **Querying data** using `SELECT`
-- The importance of **Primary Keys** (unique identifiers for each record) and **Foreign Keys** (which enforce relationships between tables)
+- **`ALTER TABLE`** to modify a table
+- **Indexes** to improve query performance
+- Additional **constraints** like `NOT NULL`, `UNIQUE`, `CHECK`, and `DEFAULT`
+- **Joins** to combine data from multiple tables
+- **Aggregate functions** (like `COUNT()`, `SUM()`, etc.) and the `GROUP BY` clause
+- **Subqueries** to embed queries within queries
 
-These are the foundational concepts of SQL, and mastering them will help you manage and manipulate relational databases effectively.
+These commands help you perform more advanced operations and optimize your database for both data integrity and performance.

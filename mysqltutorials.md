@@ -452,16 +452,305 @@ WHERE subquery.total_courses > 2;
 This query returns students who are enrolled in more than 2 courses, using a subquery in the `FROM` clause.
 
 ---
+Certainly! Let's continue exploring more advanced SQL commands and concepts that are valuable for working with databases and managing data. Here are additional SQL topics and commands you may find useful.
+
+---
+
+### 16. **Transactions**
+
+Transactions allow you to group multiple SQL statements into a single unit of work. If something goes wrong during the transaction, you can roll back the entire operation, ensuring data consistency.
+
+#### Start a Transaction
+
+```sql
+BEGIN TRANSACTION;
+```
+
+This begins a new transaction. After this point, you can execute several SQL commands.
+
+#### Commit a Transaction
+
+```sql
+COMMIT;
+```
+
+The `COMMIT` command saves all changes made during the transaction. Once committed, the changes become permanent.
+
+#### Rollback a Transaction
+
+```sql
+ROLLBACK;
+```
+
+The `ROLLBACK` command undoes all changes made during the transaction, effectively reverting the database to its state before the `BEGIN TRANSACTION` was issued.
+
+#### Example of Using Transactions
+
+```sql
+BEGIN TRANSACTION;
+
+UPDATE Students
+SET email = 'new.email@example.com'
+WHERE student_id = 1;
+
+DELETE FROM Enrollments
+WHERE student_id = 1;
+
+COMMIT;
+```
+
+In this example, if anything goes wrong (e.g., a constraint violation), you can roll back the transaction and none of the changes will be applied.
+
+---
+
+### 17. **Views**
+
+A **view** is a virtual table created by a query that combines data from one or more tables. It doesn’t store data itself but presents a result set as if it were a table.
+
+#### Creating a View
+
+```sql
+CREATE VIEW StudentCourses AS
+SELECT Students.first_name, Students.last_name, Courses.course_name
+FROM Students
+INNER JOIN Enrollments ON Students.student_id = Enrollments.student_id
+INNER JOIN Courses ON Enrollments.course_id = Courses.course_id;
+```
+
+This creates a view named `StudentCourses` that returns the list of students and the courses they are enrolled in.
+
+#### Using a View
+
+Once the view is created, you can query it just like a table.
+
+```sql
+SELECT * FROM StudentCourses;
+```
+
+#### Dropping a View
+
+To remove a view, you use the `DROP VIEW` command.
+
+```sql
+DROP VIEW StudentCourses;
+```
+
+---
+
+### 18. **Stored Procedures**
+
+A **stored procedure** is a precompiled collection of SQL statements that you can execute on the database. It allows for more complex operations, reusability, and abstraction from the end user.
+
+#### Creating a Stored Procedure
+
+```sql
+CREATE PROCEDURE GetStudentCourses (IN student_id INT)
+BEGIN
+    SELECT Students.first_name, Students.last_name, Courses.course_name
+    FROM Students
+    INNER JOIN Enrollments ON Students.student_id = Enrollments.student_id
+    INNER JOIN Courses ON Enrollments.course_id = Courses.course_id
+    WHERE Students.student_id = student_id;
+END;
+```
+
+This stored procedure returns the courses for a given student. The `IN` parameter `student_id` is used to pass the value to the procedure.
+
+#### Executing a Stored Procedure
+
+To execute the stored procedure:
+
+```sql
+CALL GetStudentCourses(1);
+```
+
+This will execute the procedure for the student with `student_id = 1`.
+
+#### Dropping a Stored Procedure
+
+To remove a stored procedure from the database:
+
+```sql
+DROP PROCEDURE GetStudentCourses;
+```
+
+---
+
+### 19. **Triggers**
+
+A **trigger** is a special kind of stored procedure that automatically runs when a specific event (like `INSERT`, `UPDATE`, or `DELETE`) occurs on a table.
+
+#### Creating a Trigger
+
+For example, let's create a trigger that automatically updates the `last_updated` timestamp in the `Students` table whenever a student's email address is changed.
+
+```sql
+CREATE TRIGGER UpdateLastUpdated
+BEFORE UPDATE ON Students
+FOR EACH ROW
+BEGIN
+    IF OLD.email <> NEW.email THEN
+        SET NEW.last_updated = NOW();
+    END IF;
+END;
+```
+
+This trigger runs **before** any update on the `Students` table. If the `email` field is updated, the `last_updated` column is set to the current timestamp.
+
+#### Dropping a Trigger
+
+To remove a trigger:
+
+```sql
+DROP TRIGGER UpdateLastUpdated;
+```
+
+---
+
+### 20. **User-Defined Functions (UDFs)**
+
+A **user-defined function** (UDF) is a function that you can define and use to perform calculations or data transformations. It can return a single value (scalar function) or a table (table-valued function).
+
+#### Creating a Simple Function
+
+For example, a function to calculate the full name of a student:
+
+```sql
+CREATE FUNCTION GetFullName(first_name VARCHAR(50), last_name VARCHAR(50))
+RETURNS VARCHAR(100)
+BEGIN
+    RETURN CONCAT(first_name, ' ', last_name);
+END;
+```
+
+This function takes two arguments (`first_name` and `last_name`) and returns them as a concatenated string (full name).
+
+#### Using the Function
+
+```sql
+SELECT GetFullName(first_name, last_name) AS full_name
+FROM Students;
+```
+
+This will return the full name for each student.
+
+#### Dropping a Function
+
+```sql
+DROP FUNCTION GetFullName;
+```
+
+---
+
+### 21. **Normalization and Denormalization**
+
+#### Normalization
+
+Normalization is the process of organizing a database to minimize redundancy and dependency. It involves breaking down tables into smaller ones and establishing relationships between them using foreign keys. The goal is to reduce data duplication and maintain data integrity.
+
+Common normal forms are:
+- **1NF (First Normal Form)**: No repeating groups or arrays in a column; each column contains atomic values.
+- **2NF (Second Normal Form)**: Achieves 1NF and removes partial dependencies (non-prime attributes should be fully dependent on the primary key).
+- **3NF (Third Normal Form)**: Achieves 2NF and removes transitive dependencies (no non-prime attribute depends on another non-prime attribute).
+
+Example of normalization:
+- You might split a table with `student_id`, `first_name`, `last_name`, and `course_name` into two tables: one for students and another for courses, with a third table for enrollments to capture the many-to-many relationship between students and courses.
+
+#### Denormalization
+
+Denormalization is the process of combining tables that have been split through normalization. It can improve query performance, but it may lead to redundant data.
+
+Example: In a highly normalized system, you might denormalize data by storing a student's full name along with course information in a single table for fast queries at the cost of data redundancy.
+
+---
+
+### 22. **Window Functions**
+
+Window functions perform calculations across a set of rows that are related to the current row. They are often used for tasks like calculating running totals, ranking rows, or finding moving averages.
+
+#### ROW_NUMBER()
+
+The `ROW_NUMBER()` function assigns a unique number to each row in a result set, based on a specified ordering.
+
+```sql
+SELECT student_id, first_name, last_name,
+       ROW_NUMBER() OVER (ORDER BY last_name) AS row_num
+FROM Students;
+```
+
+This query returns a list of students, along with a unique row number assigned based on their last name.
+
+#### RANK() and DENSE_RANK()
+
+These functions are used to assign ranks to rows, with `RANK()` leaving gaps in the ranking sequence when there are ties, while `DENSE_RANK()` does not.
+
+```sql
+SELECT student_id, first_name, last_name,
+       RANK() OVER (ORDER BY first_name) AS rank
+FROM Students;
+```
+
+This query ranks students based on their first name.
+
+#### SUM() with OVER() for Running Totals
+
+```sql
+SELECT student_id, first_name, last_name, grade,
+       SUM(grade) OVER (ORDER BY student_id) AS running_total
+FROM Students;
+```
+
+This query calculates a running total of grades for each student, ordered by `student_id`.
+
+---
+
+### 23. **Common Table Expressions (CTEs)**
+
+A **Common Table Expression (CTE)** is a temporary result set that can be referred to within a `SELECT`, `INSERT`, `UPDATE`, or `DELETE` statement.
+
+#### Creating a Simple CTE
+
+```sql
+WITH StudentCourses AS (
+    SELECT Students.first_name, Students.last_name, Courses.course_name
+    FROM Students
+    INNER JOIN Enrollments ON Students.student_id = Enrollments.student_id
+    INNER JOIN Courses ON Enrollments.course_id = Courses.course_id
+)
+SELECT * FROM StudentCourses;
+```
+
+The `WITH` clause defines a CTE named `StudentCourses`, which is then used in the `SELECT` statement.
+
+#### Recursive CTEs
+
+A **recursive CTE** is used when you need to perform operations like hierarchical data retrieval (e.g., employee-manager relationships).
+
+```sql
+WITH RECURSIVE EmployeeHierarchy AS (
+    SELECT employee_id, manager_id, name
+    FROM Employees
+    WHERE manager_id IS NULL
+    UNION ALL
+    SELECT e.employee_id, e.manager_id, e.name
+    FROM Employees e
+    INNER JOIN EmployeeHierarchy eh ON e.manager_id = eh.employee_id
+)
+SELECT * FROM EmployeeHierarchy;
+```
+
+This recursive CTE retrieves the hierarchy of employees in an organization, starting with employees who have no manager (`manager_id IS NULL`), then recursively including those who report to them.
+
+---
 
 ### Conclusion
 
-In this extended SQL tutorial, we covered several advanced SQL commands and concepts, including:
+We've now covered even more advanced SQL topics, including:
 
-- **`ALTER TABLE`** to modify a table
-- **Indexes** to improve query performance
-- Additional **constraints** like `NOT NULL`, `UNIQUE`, `CHECK`, and `DEFAULT`
-- **Joins** to combine data from multiple tables
-- **Aggregate functions** (like `COUNT()`, `SUM()`, etc.) and the `GROUP BY` clause
-- **Subqueries** to embed queries within queries
-
-These commands help you perform more advanced operations and optimize your database for both data integrity and performance.
+- **Transactions** for managing groups of SQL operations.
+- **Views** to simplify complex queries.
+- **Stored Procedures** for reusable SQL code.
+- **Triggers** for automatically executing actions on data changes.
+- **User-Defined Functions (UDFs)** for custom calculations.
+- **Normalization and Denormalization** for designing efficient database schemas.
+- **Window Functions** for advanced row-based calculations like running

@@ -754,3 +754,324 @@ We've now covered even more advanced SQL topics, including:
 - **User-Defined Functions (UDFs)** for custom calculations.
 - **Normalization and Denormalization** for designing efficient database schemas.
 - **Window Functions** for advanced row-based calculations like running
+
+
+### Intermediate SQL Tutorial
+
+In this intermediate SQL tutorial, we'll explore more advanced concepts that will help you work with databases more effectively. These topics will cover practical applications of SQL in the real world, including joins, subqueries, window functions, advanced filtering, and more.
+
+---
+
+### 1. **Advanced Joins**
+
+As you’ve seen in basic SQL, joins are used to combine data from multiple tables. Let’s dive into more advanced join techniques, including `SELF JOIN`, `CROSS JOIN`, and using `JOIN` with aggregate functions.
+
+#### 1.1 **SELF JOIN**
+
+A **self join** is a join where a table is joined with itself. It’s useful when you have hierarchical data in a table, such as employees reporting to managers.
+
+##### Example:
+
+Imagine you have an `Employees` table with the following columns:
+
+- `employee_id`
+- `name`
+- `manager_id` (which is the `employee_id` of their manager)
+
+To list employees and their managers:
+
+```sql
+SELECT e1.name AS employee, e2.name AS manager
+FROM Employees e1
+LEFT JOIN Employees e2 ON e1.manager_id = e2.employee_id;
+```
+
+Here:
+- `e1` is the alias for the employee.
+- `e2` is the alias for the manager (which is also an employee in this case).
+- The `LEFT JOIN` ensures that employees without managers are also included in the result.
+
+#### 1.2 **CROSS JOIN**
+
+A **CROSS JOIN** returns the Cartesian product of two tables. It will return all possible combinations of rows from the two tables.
+
+##### Example:
+
+```sql
+SELECT Products.product_name, Categories.category_name
+FROM Products
+CROSS JOIN Categories;
+```
+
+This query returns every combination of products and categories. **Be cautious** with `CROSS JOIN`, as it can generate a large result set.
+
+#### 1.3 **JOIN with Aggregate Functions**
+
+You can use aggregate functions like `COUNT()`, `SUM()`, `AVG()`, `MAX()`, and `MIN()` with joins to summarize data.
+
+##### Example:
+
+Let’s say we want to know how many students are enrolled in each course. We have two tables: `Courses` and `Enrollments`.
+
+```sql
+SELECT c.course_name, COUNT(e.student_id) AS number_of_students
+FROM Courses c
+LEFT JOIN Enrollments e ON c.course_id = e.course_id
+GROUP BY c.course_name;
+```
+
+Here:
+- `COUNT(e.student_id)` counts the number of students per course.
+- `GROUP BY` is used to group the result by `course_name`.
+
+---
+
+### 2. **Subqueries**
+
+Subqueries (also known as nested queries) are queries within queries. They can be used in `WHERE`, `FROM`, and `SELECT` clauses to perform complex operations.
+
+#### 2.1 **Subqueries in the WHERE Clause**
+
+A subquery can be used in the `WHERE` clause to filter results based on values from another table.
+
+##### Example:
+
+Let's find students who are enrolled in courses with more than 30 students:
+
+```sql
+SELECT student_id, first_name, last_name
+FROM Students
+WHERE student_id IN (
+    SELECT student_id
+    FROM Enrollments
+    GROUP BY student_id
+    HAVING COUNT(course_id) > 30
+);
+```
+
+#### 2.2 **Subqueries in the FROM Clause**
+
+You can use a subquery in the `FROM` clause to create a temporary table for further analysis.
+
+##### Example:
+
+```sql
+SELECT temp.student_id, temp.total_courses
+FROM (
+    SELECT student_id, COUNT(course_id) AS total_courses
+    FROM Enrollments
+    GROUP BY student_id
+) AS temp
+WHERE temp.total_courses > 2;
+```
+
+In this example, the subquery in the `FROM` clause calculates the total number of courses each student is enrolled in. The outer query filters for students enrolled in more than two courses.
+
+#### 2.3 **Correlated Subqueries**
+
+A **correlated subquery** references columns from the outer query. The subquery is executed for each row in the outer query.
+
+##### Example:
+
+Find students who are enrolled in courses with a total enrollment greater than 50.
+
+```sql
+SELECT s.first_name, s.last_name
+FROM Students s
+WHERE EXISTS (
+    SELECT 1
+    FROM Enrollments e
+    WHERE e.student_id = s.student_id
+    GROUP BY e.course_id
+    HAVING COUNT(e.student_id) > 50
+);
+```
+
+In this query, the subquery is executed once for each student in the outer query. The `EXISTS` operator checks if the subquery returns any rows (i.e., if the student is enrolled in a course with more than 50 students).
+
+---
+
+### 3. **Window Functions**
+
+Window functions are advanced functions that perform calculations across a set of table rows related to the current row. They are useful for tasks such as running totals, moving averages, and ranking.
+
+#### 3.1 **ROW_NUMBER()**
+
+The `ROW_NUMBER()` function assigns a unique integer to rows in a result set, based on a specified order.
+
+##### Example:
+
+Let’s rank students based on their total grade in descending order:
+
+```sql
+SELECT student_id, first_name, last_name, total_grade,
+       ROW_NUMBER() OVER (ORDER BY total_grade DESC) AS rank
+FROM Students;
+```
+
+This assigns a rank to each student, where the student with the highest `total_grade` gets rank 1.
+
+#### 3.2 **RANK() and DENSE_RANK()**
+
+- `RANK()` assigns a rank to each row, but if there are ties (i.e., rows with the same value), it leaves gaps in the rank numbers.
+- `DENSE_RANK()` also handles ties but does not leave gaps in the rank numbers.
+
+##### Example:
+
+```sql
+SELECT student_id, first_name, last_name, total_grade,
+       RANK() OVER (ORDER BY total_grade DESC) AS rank,
+       DENSE_RANK() OVER (ORDER BY total_grade DESC) AS dense_rank
+FROM Students;
+```
+
+Here, students with the same `total_grade` will receive the same rank. However, `RANK()` will leave gaps in the rank (e.g., 1, 1, 3), while `DENSE_RANK()` will not (e.g., 1, 1, 2).
+
+#### 3.3 **SUM() with OVER() for Running Totals**
+
+The `SUM()` window function can calculate running totals across rows.
+
+##### Example:
+
+```sql
+SELECT student_id, total_grade,
+       SUM(total_grade) OVER (ORDER BY student_id) AS running_total
+FROM Students;
+```
+
+This query calculates the running total of `total_grade` for each student, ordered by `student_id`.
+
+#### 3.4 **PARTITION BY with Window Functions**
+
+You can partition the result set into groups, and the window function will operate on each group separately.
+
+##### Example:
+
+Let’s calculate the rank of students within each course.
+
+```sql
+SELECT course_id, student_id, total_grade,
+       RANK() OVER (PARTITION BY course_id ORDER BY total_grade DESC) AS rank
+FROM Enrollments;
+```
+
+This query calculates the rank of students within each course, ordered by their `total_grade`.
+
+---
+
+### 4. **Grouping and Aggregating Data**
+
+#### 4.1 **GROUP BY with Multiple Columns**
+
+You can group data by more than one column to perform more complex aggregations.
+
+##### Example:
+
+Let’s calculate the number of students enrolled in each course, broken down by department:
+
+```sql
+SELECT c.course_name, c.department, COUNT(e.student_id) AS number_of_students
+FROM Courses c
+LEFT JOIN Enrollments e ON c.course_id = e.course_id
+GROUP BY c.course_name, c.department;
+```
+
+This groups the results by both `course_name` and `department`.
+
+#### 4.2 **HAVING Clause**
+
+The `HAVING` clause is used to filter results after aggregation has occurred (like `GROUP BY`). It is similar to the `WHERE` clause but works with grouped data.
+
+##### Example:
+
+Find courses with more than 10 students enrolled:
+
+```sql
+SELECT c.course_name, COUNT(e.student_id) AS number_of_students
+FROM Courses c
+LEFT JOIN Enrollments e ON c.course_id = e.course_id
+GROUP BY c.course_name
+HAVING COUNT(e.student_id) > 10;
+```
+
+The `HAVING` clause filters groups where the number of students is greater than 10.
+
+---
+
+### 5. **Advanced Filtering Techniques**
+
+#### 5.1 **Using `IN` with Subqueries**
+
+You can use the `IN` operator to check whether a value exists in a set of values returned by a subquery.
+
+##### Example:
+
+Find students who are enrolled in any of the courses taught by a particular instructor (let’s say instructor_id = 5):
+
+```sql
+SELECT s.student_id, s.first_name, s.last_name
+FROM Students s
+WHERE s.student_id IN (
+    SELECT e.student_id
+    FROM Enrollments e
+    INNER JOIN Courses c ON e.course_id = c.course_id
+    WHERE c.instructor_id = 5
+);
+```
+
+This subquery returns the `student_id` values of students enrolled in courses taught by instructor 5, and the main query uses this to filter students.
+
+#### 5.2 **Using `EXISTS`**
+
+The `EXISTS` operator checks whether a subquery returns any rows. It's often used when you want to test for the existence of related data.
+
+##### Example:
+
+Find students who are enrolled in at least one course:
+
+```sql
+SELECT s.student_id, s.first_name, s.last_name
+FROM Students s
+WHERE EXISTS (
+    SELECT 1
+    FROM Enrollments e
+    WHERE e
+
+.student_id = s.student_id
+);
+```
+
+This query returns only the students who are enrolled in at least one course.
+
+#### 5.3 **`LIKE` and Wildcards**
+
+The `LIKE` operator is used for pattern matching with wildcards.
+
+- `%` matches zero or more characters.
+- `_` matches exactly one character.
+
+##### Example:
+
+Find students whose last name starts with "S":
+
+```sql
+SELECT first_name, last_name
+FROM Students
+WHERE last_name LIKE 'S%';
+```
+
+This query matches all students whose last name starts with "S".
+
+---
+
+### Conclusion
+
+In this **Intermediate SQL Tutorial**, we’ve covered the following concepts:
+
+- **Advanced Joins**: Using self joins, cross joins, and joins with aggregate functions.
+- **Subqueries**: Subqueries in `WHERE`, `FROM`, and `SELECT` clauses, including correlated subqueries.
+- **Window Functions**: Using `ROW_NUMBER()`, `RANK()`, and `SUM()` with `OVER()` and `PARTITION BY` for running totals and rankings.
+- **Grouping and Aggregating**: Using `GROUP BY` with multiple columns, `HAVING` for post-aggregation filtering, and aggregate functions.
+- **Advanced Filtering**: Using `IN`, `EXISTS`, and pattern matching with `LIKE`.
+
+These intermediate techniques provide the building blocks for writing more complex and efficient SQL queries. As you practice these concepts, you'll be able to handle more sophisticated data manipulation and analysis tasks.

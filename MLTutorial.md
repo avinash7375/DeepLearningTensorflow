@@ -291,3 +291,226 @@ If you run the code above, you'll get:
 - Numerical values for **accuracy**, **precision**, **recall**, and **F1-score**.
 
 Let me know if you need further help!
+### -----------------------------------------------------------------------------------------------------------------------------------
+
+Here's a breakdown of **metrics evaluation** (accuracy, precision, recall, F1-score, confusion matrix) for **all supervised learning algorithms** using Python, with example implementations for classification tasks.
+
+---
+
+### **1. Linear Regression**
+Linear regression is a regression algorithm and not typically evaluated with precision/recall/F1-score. Instead, metrics like **Mean Squared Error (MSE)** or **R-squared** are used.
+
+#### Code Example:
+```python
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+# Example data
+X = np.array([[1], [2], [3], [4], [5]])
+y = np.array([1.2, 2.1, 3.0, 4.2, 5.1])
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model training
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"Mean Squared Error: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+```
+
+---
+
+### **2. Logistic Regression**
+Used for binary/multi-class classification. Evaluated using confusion matrix, accuracy, precision, recall, and F1-score.
+
+#### Code Example:
+```python
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import make_classification
+
+# Generate synthetic dataset
+X, y = make_classification(n_samples=1000, n_features=10, n_classes=2, random_state=42)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model training
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+---
+
+### **3. Decision Tree**
+A classification algorithm evaluated similarly to logistic regression.
+
+#### Code Example:
+```python
+from sklearn.tree import DecisionTreeClassifier
+
+# Train Decision Tree
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+---
+
+### **4. Support Vector Machines (SVM)**
+Used for classification and regression problems.
+
+#### Code Example:
+```python
+from sklearn.svm import SVC
+
+# Train SVM
+model = SVC()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+---
+
+### **5. K-Nearest Neighbors (KNN)**
+A distance-based classification algorithm.
+
+#### Code Example:
+```python
+from sklearn.neighbors import KNeighborsClassifier
+
+# Train KNN
+model = KNeighborsClassifier(n_neighbors=5)
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+---
+
+### **6. Naive Bayes**
+Typically used for text classification or categorical data.
+
+#### Code Example:
+```python
+from sklearn.naive_bayes import GaussianNB
+
+# Train Naive Bayes
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+---
+
+### **7. Random Forest**
+Ensemble-based algorithm for classification or regression.
+
+#### Code Example:
+```python
+from sklearn.ensemble import RandomForestClassifier
+
+# Train Random Forest
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+---
+
+### **8. Gradient Boosting Algorithms**
+For example, XGBoost.
+
+#### Code Example:
+```python
+from xgboost import XGBClassifier
+
+# Train XGBoost
+model = XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+---
+
+### Notes:
+1. Replace `X` and `y` with your dataset for practical use.
+2. All these models can be evaluated with the same metrics (accuracy, precision, recall, etc.) for classification tasks.
+3. For regression (e.g., linear regression), other metrics like MSE, MAE, or R2 are used.
+
+Let me know if you need help with any specific algorithm or dataset!

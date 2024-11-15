@@ -1105,6 +1105,213 @@ WHERE salary > 50000 AND department = 'HR';
 ```
 - This will return all employees who have a salary greater than 50,000 and work in the 'HR' department.
 
+Sure! Let's assume we have a simple **Books** database with the following table:
+
+### **Books Table:**
+| `book_id` | `title`             | `author`       | `published_year` | `price` | `genre`      |
+|-----------|---------------------|----------------|------------------|---------|--------------|
+| 1         | "The Great Gatsby"   | F. Scott       | 1925             | 10.99   | Fiction      |
+| 2         | "1984"               | George Orwell  | 1949             | 8.99    | Dystopian    |
+| 3         | "To Kill a Mockingbird" | Harper Lee   | 1960             | 12.49   | Fiction      |
+| 4         | "Brave New World"    | Aldous Huxley  | 1932             | 9.99    | Dystopian    |
+| 5         | "The Catcher in the Rye" | J.D. Salinger | 1951          | 11.99   | Fiction      |
+| 6         | "Moby Dick"          | Herman Melville| 1851             | 15.49   | Fiction      |
+| 7         | "The Hobbit"         | J.R.R. Tolkien | 1937             | 14.99   | Fantasy      |
+| 8         | "Harry Potter"       | J.K. Rowling   | 1997             | 19.99   | Fantasy      |
+
+---
+
+### SQL Conditions with Examples
+
+#### 1. **`=` (Equal to)**
+Find all books published in 1960.
+
+```sql
+SELECT * 
+FROM books 
+WHERE published_year = 1960;
+```
+Result:
+| `book_id` | `title`              | `author`        | `published_year` | `price` | `genre`      |
+|-----------|----------------------|-----------------|------------------|---------|--------------|
+| 3         | "To Kill a Mockingbird" | Harper Lee    | 1960             | 12.49   | Fiction      |
+
+#### 2. **`!=` or `<>` (Not equal to)**
+Find all books that are not of the genre "Dystopian".
+
+```sql
+SELECT * 
+FROM books 
+WHERE genre != 'Dystopian';
+```
+Result:
+| `book_id` | `title`              | `author`        | `published_year` | `price` | `genre`      |
+|-----------|----------------------|-----------------|------------------|---------|--------------|
+| 1         | "The Great Gatsby"    | F. Scott        | 1925             | 10.99   | Fiction      |
+| 3         | "To Kill a Mockingbird" | Harper Lee    | 1960             | 12.49   | Fiction      |
+| 5         | "The Catcher in the Rye" | J.D. Salinger | 1951            | 11.99   | Fiction      |
+| 6         | "Moby Dick"           | Herman Melville | 1851             | 15.49   | Fiction      |
+| 7         | "The Hobbit"          | J.R.R. Tolkien  | 1937             | 14.99   | Fantasy      |
+| 8         | "Harry Potter"        | J.K. Rowling    | 1997             | 19.99   | Fantasy      |
+
+#### 3. **`>` (Greater than)**
+Find books with a price greater than 12.
+
+```sql
+SELECT * 
+FROM books 
+WHERE price > 12;
+```
+Result:
+| `book_id` | `title`             | `author`        | `published_year` | `price` | `genre`      |
+|-----------|---------------------|-----------------|------------------|---------|--------------|
+| 6         | "Moby Dick"          | Herman Melville | 1851             | 15.49   | Fiction      |
+| 7         | "The Hobbit"         | J.R.R. Tolkien  | 1937             | 14.99   | Fantasy      |
+| 8         | "Harry Potter"       | J.K. Rowling    | 1997             | 19.99   | Fantasy      |
+
+#### 4. **`<` (Less than)**
+Find books that cost less than $10.
+
+```sql
+SELECT * 
+FROM books 
+WHERE price < 10;
+```
+Result:
+| `book_id` | `title`          | `author`       | `published_year` | `price` | `genre`     |
+|-----------|------------------|----------------|------------------|---------|-------------|
+| 2         | "1984"           | George Orwell  | 1949             | 8.99    | Dystopian   |
+
+#### 5. **`>=` (Greater than or equal to)**
+Find books published in or after 1950.
+
+```sql
+SELECT * 
+FROM books 
+WHERE published_year >= 1950;
+```
+Result:
+| `book_id` | `title`                  | `author`        | `published_year` | `price` | `genre`      |
+|-----------|--------------------------|-----------------|------------------|---------|--------------|
+| 2         | "1984"                   | George Orwell   | 1949             | 8.99    | Dystopian    |
+| 3         | "To Kill a Mockingbird"   | Harper Lee      | 1960             | 12.49   | Fiction      |
+| 5         | "The Catcher in the Rye"  | J.D. Salinger   | 1951             | 11.99   | Fiction      |
+| 7         | "The Hobbit"              | J.R.R. Tolkien  | 1937             | 14.99   | Fantasy      |
+| 8         | "Harry Potter"            | J.K. Rowling    | 1997             | 19.99   | Fantasy      |
+
+#### 6. **`<=` (Less than or equal to)**
+Find books that were published in 1937 or earlier.
+
+```sql
+SELECT * 
+FROM books 
+WHERE published_year <= 1937;
+```
+Result:
+| `book_id` | `title`              | `author`       | `published_year` | `price` | `genre`      |
+|-----------|----------------------|----------------|------------------|---------|--------------|
+| 1         | "The Great Gatsby"    | F. Scott       | 1925             | 10.99   | Fiction      |
+| 4         | "Brave New World"     | Aldous Huxley  | 1932             | 9.99    | Dystopian    |
+
+#### 7. **`BETWEEN`**
+Find books with prices between $10 and $15 (inclusive).
+
+```sql
+SELECT * 
+FROM books 
+WHERE price BETWEEN 10 AND 15;
+```
+Result:
+| `book_id` | `title`               | `author`        | `published_year` | `price` | `genre`      |
+|-----------|-----------------------|-----------------|------------------|---------|--------------|
+| 1         | "The Great Gatsby"     | F. Scott        | 1925             | 10.99   | Fiction      |
+| 3         | "To Kill a Mockingbird" | Harper Lee     | 1960             | 12.49   | Fiction      |
+| 5         | "The Catcher in the Rye" | J.D. Salinger | 1951             | 11.99   | Fiction      |
+| 4         | "Brave New World"      | Aldous Huxley   | 1932             | 9.99    | Dystopian    |
+
+#### 8. **`IN`**
+Find books that are in the genres "Fiction" or "Fantasy".
+
+```sql
+SELECT * 
+FROM books 
+WHERE genre IN ('Fiction', 'Fantasy');
+```
+Result:
+| `book_id` | `title`                  | `author`        | `published_year` | `price` | `genre`      |
+|-----------|--------------------------|-----------------|------------------|---------|--------------|
+| 1         | "The Great Gatsby"        | F. Scott        | 1925             | 10.99   | Fiction      |
+| 3         | "To Kill a Mockingbird"   | Harper Lee      | 1960             | 12.49   | Fiction      |
+| 5         | "The Catcher in the Rye"  | J.D. Salinger   | 1951             | 11.99   | Fiction      |
+| 6         | "Moby Dick"               | Herman Melville | 1851             | 15.49   | Fiction      |
+| 7         | "The Hobbit"              | J.R.R. Tolkien  | 1937             | 14.99   | Fantasy      |
+| 8         | "Harry Potter"            | J.K. Rowling    | 1997             | 19.99   | Fantasy      |
+
+#### 9. **`LIKE`**
+Find books whose title contains the word "the".
+
+```sql
+SELECT * 
+FROM books 
+WHERE title LIKE '%the%';
+```
+Result:
+| `book_id` | `title`                  | `author`        | `published_year` | `price` | `genre`      |
+|-----------|--------------------------|-----------------|------------------|---------|--------------|
+
+
+| 1         | "The Great Gatsby"        | F. Scott        | 1925             | 10.99   | Fiction      |
+| 3         | "To Kill a Mockingbird"   | Harper Lee      | 1960             | 12.49   | Fiction      |
+| 5         | "The Catcher in the Rye"  | J.D. Salinger   | 1951             | 11.99   | Fiction      |
+| 7         | "The Hobbit"              | J.R.R. Tolkien  | 1937             | 14.99   | Fantasy      |
+| 8         | "Harry Potter"            | J.K. Rowling    | 1997             | 19.99   | Fantasy      |
+
+#### 10. **`IS NULL`**
+Find books that have no price listed (price is NULL).
+
+```sql
+SELECT * 
+FROM books 
+WHERE price IS NULL;
+```
+Result:
+| `book_id` | `title` | `author` | `published_year` | `price` | `genre` |
+|-----------|---------|----------|------------------|---------|---------|
+| *No rows* |         |          |                  |         |         |
+- (In this case, no book has a NULL price, so the result is empty.)
+
+#### 11. **`NOT`**
+Find books that are *not* of the genre "Dystopian".
+
+```sql
+SELECT * 
+FROM books 
+WHERE genre NOT LIKE 'Dystopian';
+```
+Result:
+| `book_id` | `title`               | `author`        | `published_year` | `price` | `genre`      |
+|-----------|-----------------------|-----------------|------------------|---------|--------------|
+| 1         | "The Great Gatsby"     | F. Scott        | 1925             | 10.99   | Fiction      |
+| 3         | "To Kill a Mockingbird" | Harper Lee     | 1960             | 12.49   | Fiction      |
+| 5         | "The Catcher in the Rye" | J.D. Salinger | 1951            | 11.99   | Fiction      |
+| 6         | "Moby Dick"            | Herman Melville | 1851             | 15.49   | Fiction      |
+| 7         | "The Hobbit"           | J.R.R. Tolkien  | 1937             | 14.99   | Fantasy      |
+| 8         | "Harry Potter"         | J.K. Rowling    | 1997             | 19.99   | Fantasy      |
+
+---
+
+### Summary:
+
+- **`=`** checks for equality (e.g., a specific price or year).
+- **`!=` or `<>`** checks for inequality (e.g., books not in a certain genre).
+- **`>` / `<`** checks for values greater or lesser (e.g., books priced above a certain amount).
+- **`BETWEEN`** checks for a value in a given range (e.g., book prices between $10 and $15).
+- **`IN`** checks if a value matches any in a list (e.g., specific genres).
+- **`LIKE`** is for pattern matching (e.g., finding books whose title contains "the").
+- **`IS NULL`** checks for NULL values (e.g., missing price).
+- **`NOT`** negates conditions (e.g., books not in a specific genre).
+
+
 #### Logical Operators:
 - **AND**: Combines multiple conditions. All conditions must be true for the row to be included.
 - **OR**: Combines multiple conditions. Only one condition needs to be true for the row to be included.

@@ -1075,3 +1075,120 @@ In this **Intermediate SQL Tutorial**, we’ve covered the following concepts:
 - **Advanced Filtering**: Using `IN`, `EXISTS`, and pattern matching with `LIKE`.
 
 These intermediate techniques provide the building blocks for writing more complex and efficient SQL queries. As you practice these concepts, you'll be able to handle more sophisticated data manipulation and analysis tasks.
+
+## ------------------------------------------------------------------------------------------
+
+In SQL, **conditions** and **joins** are fundamental concepts that allow you to filter and combine data from multiple tables. Here's an explanation of each:
+
+### **1. Conditions in SQL:**
+Conditions in SQL are used to filter records based on specific criteria. These conditions are typically used in the `WHERE` clause to limit the rows returned by a query. SQL supports various operators to form conditions.
+
+#### Common SQL Condition Operators:
+- **Comparison Operators**:
+  - `=`: Equal to
+  - `!=` or `<>`: Not equal to
+  - `>`: Greater than
+  - `<`: Less than
+  - `>=`: Greater than or equal to
+  - `<=`: Less than or equal to
+  - `BETWEEN`: Checks if a value is within a range (inclusive).
+  - `IN`: Checks if a value matches any value in a list.
+  - `LIKE`: Used for pattern matching (often with wildcards).
+  - `IS NULL`: Checks if a column has no value (NULL).
+  - `NOT`: Negates a condition.
+
+#### Example:
+```sql
+SELECT * 
+FROM employees
+WHERE salary > 50000 AND department = 'HR';
+```
+- This will return all employees who have a salary greater than 50,000 and work in the 'HR' department.
+
+#### Logical Operators:
+- **AND**: Combines multiple conditions. All conditions must be true for the row to be included.
+- **OR**: Combines multiple conditions. Only one condition needs to be true for the row to be included.
+- **NOT**: Negates a condition. It returns rows where the condition is false.
+
+### **2. Joins in SQL:**
+Joins are used to combine rows from two or more tables based on related columns between them. Joins allow you to retrieve data from multiple tables in a single query.
+
+#### Types of Joins:
+1. **INNER JOIN**: 
+   - Returns rows when there is a match in both tables.
+   - If there is no match, the row is not included in the result.
+   - The most common type of join.
+
+   Example:
+   ```sql
+   SELECT employees.name, departments.department_name
+   FROM employees
+   INNER JOIN departments ON employees.department_id = departments.id;
+   ```
+   - This will return a list of employee names along with their department names where there's a matching `department_id` in both tables.
+
+2. **LEFT JOIN (or LEFT OUTER JOIN)**:
+   - Returns all rows from the left table (the first table in the query) and the matching rows from the right table.
+   - If there is no match, NULL values will be returned for columns from the right table.
+
+   Example:
+   ```sql
+   SELECT employees.name, departments.department_name
+   FROM employees
+   LEFT JOIN departments ON employees.department_id = departments.id;
+   ```
+   - This will return all employees, even those who do not belong to a department (with `NULL` for `department_name` in that case).
+
+3. **RIGHT JOIN (or RIGHT OUTER JOIN)**:
+   - Similar to the `LEFT JOIN`, but returns all rows from the right table and matching rows from the left table.
+   - If there is no match, NULL values are returned for columns from the left table.
+
+   Example:
+   ```sql
+   SELECT employees.name, departments.department_name
+   FROM employees
+   RIGHT JOIN departments ON employees.department_id = departments.id;
+   ```
+   - This will return all departments, even those without any employees (with `NULL` for `employee.name`).
+
+4. **FULL JOIN (or FULL OUTER JOIN)**:
+   - Returns rows when there is a match in either the left or the right table.
+   - If there is no match, it will return NULL for the table without a match.
+
+   Example:
+   ```sql
+   SELECT employees.name, departments.department_name
+   FROM employees
+   FULL JOIN departments ON employees.department_id = departments.id;
+   ```
+   - This will return all employees and all departments, with `NULL` for non-matching rows.
+
+5. **CROSS JOIN**:
+   - Returns the Cartesian product of two tables (every row from the first table is combined with every row from the second table).
+   - Use with caution, as it can produce a very large result set.
+
+   Example:
+   ```sql
+   SELECT employees.name, departments.department_name
+   FROM employees
+   CROSS JOIN departments;
+   ```
+   - This will return every combination of employee and department.
+
+#### Joining Multiple Tables:
+You can combine more than two tables by chaining multiple joins together.
+
+Example:
+```sql
+SELECT employees.name, departments.department_name, locations.city
+FROM employees
+INNER JOIN departments ON employees.department_id = departments.id
+INNER JOIN locations ON departments.location_id = locations.id;
+```
+- This will return a list of employees, their department names, and the city where the department is located.
+
+### Summary:
+- **Conditions** allow you to filter data with operators like `=`, `>`, `BETWEEN`, `LIKE`, etc., and logical operators like `AND`, `OR`, and `NOT`.
+- **Joins** combine rows from multiple tables based on a relationship between them. The most common types are `INNER JOIN`, `LEFT JOIN`, `RIGHT JOIN`, `FULL JOIN`, and `CROSS JOIN`.
+
+By combining conditions and joins, you can retrieve very specific data from complex databases.

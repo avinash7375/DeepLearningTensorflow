@@ -1077,6 +1077,28 @@ In this **Intermediate SQL Tutorial**, we’ve covered the following concepts:
 These intermediate techniques provide the building blocks for writing more complex and efficient SQL queries. As you practice these concepts, you'll be able to handle more sophisticated data manipulation and analysis tasks.
 
 ## ------------------------------------------------------------------------------------------
+-- Create the table with the necessary columns
+```CREATE TABLE books (
+    book_id INT PRIMARY KEY,
+    title VARCHAR(255),
+    author VARCHAR(255),
+    published_year INT,
+    price DECIMAL(5, 2),
+    genre VARCHAR(50)
+);
+```
+-- Insert the data into the table
+```
+INSERT INTO books (book_id, title, author, published_year, price, genre) VALUES
+(1, 'The Great Gatsby', 'F. Scott', 1925, 10.99, 'Fiction'),
+(2, '1984', 'George Orwell', 1949, 8.99, 'Dystopian'),
+(3, 'To Kill a Mockingbird', 'Harper Lee', 1960, 12.49, 'Fiction'),
+(4, 'Brave New World', 'Aldous Huxley', 1932, 9.99, 'Dystopian'),
+(5, 'The Catcher in the Rye', 'J.D. Salinger', 1951, 11.99, 'Fiction'),
+(6, 'Moby Dick', 'Herman Melville', 1851, 15.49, 'Fiction'),
+(7, 'The Hobbit', 'J.R.R. Tolkien', 1937, 14.99, 'Fantasy'),
+(8, 'Harry Potter', 'J.K. Rowling', 1997, 19.99, 'Fantasy');
+```
 
 In SQL, **conditions** and **joins** are fundamental concepts that allow you to filter and combine data from multiple tables. Here's an explanation of each:
 

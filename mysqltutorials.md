@@ -1077,8 +1077,11 @@ In this **Intermediate SQL Tutorial**, we’ve covered the following concepts:
 These intermediate techniques provide the building blocks for writing more complex and efficient SQL queries. As you practice these concepts, you'll be able to handle more sophisticated data manipulation and analysis tasks.
 
 ## ------------------------------------------------------------------------------------------
+Here is an SQL query that creates a table and inserts the data you provided:
+
+```sql
 -- Create the table with the necessary columns
-```CREATE TABLE books (
+CREATE TABLE books (
     book_id INT PRIMARY KEY,
     title VARCHAR(255),
     author VARCHAR(255),
@@ -1086,9 +1089,8 @@ These intermediate techniques provide the building blocks for writing more compl
     price DECIMAL(5, 2),
     genre VARCHAR(50)
 );
-```
+
 -- Insert the data into the table
-```
 INSERT INTO books (book_id, title, author, published_year, price, genre) VALUES
 (1, 'The Great Gatsby', 'F. Scott', 1925, 10.99, 'Fiction'),
 (2, '1984', 'George Orwell', 1949, 8.99, 'Dystopian'),
@@ -1099,6 +1101,18 @@ INSERT INTO books (book_id, title, author, published_year, price, genre) VALUES
 (7, 'The Hobbit', 'J.R.R. Tolkien', 1937, 14.99, 'Fantasy'),
 (8, 'Harry Potter', 'J.K. Rowling', 1997, 19.99, 'Fantasy');
 ```
+
+### Explanation:
+1. The `CREATE TABLE` statement defines the table schema:
+   - `book_id` is the primary key.
+   - `title` and `author` are variable-length strings with a maximum length of 255 characters.
+   - `published_year` is an integer.
+   - `price` is a decimal number with two decimal places.
+   - `genre` is a variable-length string with a maximum length of 50 characters.
+   
+2. The `INSERT INTO` statement adds the data for the books into the table.
+
+This SQL code should create a table called `books` with the provided columns and data. You can run this code in a MySQL, PostgreSQL, or any other SQL-based database.
 
 In SQL, **conditions** and **joins** are fundamental concepts that allow you to filter and combine data from multiple tables. Here's an explanation of each:
 

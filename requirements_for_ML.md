@@ -5,7 +5,8 @@ Confusion metrics
 from User guide
 in Supervised learning
 -- https://scikit-learn.org/stable/user_guide.html
------ 1.1.1. Ordinary Least Squares
+----- 
+1.1.1. Ordinary Least Squares
 1.1.2. Ridge regression and classification
 1.1.3. Lasso
 1.1.4. Multi-task Lasso

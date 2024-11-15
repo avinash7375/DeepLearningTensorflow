@@ -184,3 +184,110 @@ print(scores.mean())
 ---
 
 This covers the **Beginner Level** of ML. Let me know if you'd like detailed guides or examples for any specific topic!
+### --------------------------------------------------------------------------------------------------------------------------------
+
+### ALL CONFUSION MATRIX
+
+Sure, I'll provide a tutorial focusing on **accuracy**, **precision**, **recall**, **F1-score**, and **confusion matrix** in machine learning.
+
+---
+
+### **1. Confusion Matrix**
+The confusion matrix is a performance measurement tool for classification models. It summarizes the model's predictions against actual labels. For binary classification, it has four elements:
+
+|                 | Predicted Positive | Predicted Negative |
+|-----------------|--------------------|--------------------|
+| **Actual Positive** | True Positive (TP)  | False Negative (FN) |
+| **Actual Negative** | False Positive (FP) | True Negative (TN)  |
+
+#### Key Metrics:
+1. **True Positive (TP):** Correctly predicted positive instances.
+2. **True Negative (TN):** Correctly predicted negative instances.
+3. **False Positive (FP):** Negative instances incorrectly predicted as positive.
+4. **False Negative (FN):** Positive instances incorrectly predicted as negative.
+
+---
+
+### **2. Accuracy**
+Accuracy measures the proportion of correctly predicted instances to the total instances.
+
+\[
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+\]
+
+- **Strengths:** Easy to interpret and compute.
+- **Weakness:** Fails when classes are imbalanced.
+
+---
+
+### **3. Precision**
+Precision measures how many of the predicted positive instances are correct.
+
+\[
+\text{Precision} = \frac{TP}{TP + FP}
+\]
+
+- **High Precision:** Low false positive rate.
+- **Use Case:** When false positives are costly (e.g., spam email detection).
+
+---
+
+### **4. Recall (Sensitivity)**
+Recall measures how many of the actual positive instances are correctly identified.
+
+\[
+\text{Recall} = \frac{TP}{TP + FN}
+\]
+
+- **High Recall:** Low false negative rate.
+- **Use Case:** When false negatives are costly (e.g., medical diagnoses).
+
+---
+
+### **5. F1-Score**
+The F1-score is the harmonic mean of precision and recall. It balances the two metrics.
+
+\[
+\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+
+- **Value Range:** 0 (worst) to 1 (best).
+- **Use Case:** When there's an imbalance between precision and recall.
+
+---
+
+### **Python Example**
+Here's a code snippet using Python:
+
+```python
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+
+# Example data
+y_true = [1, 0, 1, 1, 0, 1, 0, 0, 1, 0]  # True labels
+y_pred = [1, 0, 1, 0, 0, 1, 0, 1, 1, 0]  # Predicted labels
+
+# Confusion Matrix
+cm = confusion_matrix(y_true, y_pred)
+print("Confusion Matrix:")
+print(cm)
+
+# Metrics
+accuracy = accuracy_score(y_true, y_pred)
+precision = precision_score(y_true, y_pred)
+recall = recall_score(y_true, y_pred)
+f1 = f1_score(y_true, y_pred)
+
+print(f"Accuracy: {accuracy:.2f}")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
+print(f"F1-Score: {f1:.2f}")
+```
+
+---
+
+### **Output Explanation**
+If you run the code above, you'll get:
+- **Confusion Matrix** structure.
+- Numerical values for **accuracy**, **precision**, **recall**, and **F1-score**.
+
+Let me know if you need further help!

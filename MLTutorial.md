@@ -31,7 +31,7 @@ Here’s a detailed set of notes for the **Beginner Level** of Machine Learning.
 
 ### **Mathematics**
 1. **Linear Algebra**:
-   - Vectors, matrices, and their operations.
+   - Vectors, matrices, and their operations. https://web.stanford.edu/class/nbio228-01/handouts/Ch4_Linear_Algebra.pdf
    - Example: Representing data in a tabular format.
 2. **Probability and Statistics**:
    - Basic concepts: Mean, median, variance, standard deviation.

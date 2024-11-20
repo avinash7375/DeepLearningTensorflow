@@ -109,3 +109,16 @@ To create a tutorial on the topics outlined in the image, I'll break it down int
 ---
 
 Would you like me to create detailed code samples or dive deeper into specific topics?
+
+
+--------------------------------------------------------------------------------------------------------------------------
+| **Vision**                               | **Text**                            | **Audio**                             |
+|------------------------------------------|-------------------------------------|---------------------------------------|
+| Support Vector Machines (SVMs)           | Logistic Regression                 | Gaussian Mixture Models (GMMs)        |
+| Decision Trees                           | Naive Bayes                         | k-Nearest Neighbors (k-NN)            |
+| Random Forest                            | Support Vector Machines (SVMs)      | Decision Trees                        |
+| k-Nearest Neighbors (k-NN)               | Random Forest                       | Random Forest                         |
+| Logistic Regression                      | k-Nearest Neighbors (k-NN)          | Hidden Markov Models (HMMs)           |
+| Linear Regression (for regression tasks) | Linear Regression                   | Linear Regression                     |
+| Multi-Layer Perceptrons (MLPs)           | Multi-Layer Perceptrons (MLPs)      | Multi-Layer Perceptrons (MLPs)        |
+--------------------------------------------------------------------------------------------------------------------------

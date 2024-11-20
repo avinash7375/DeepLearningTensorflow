@@ -1,5 +1,3 @@
-To create a tutorial on the topics outlined in the image, I'll break it down into sections for **Machine Learning** (Module 5) and **Deep Learning** (Module 6). Here's an outline for the tutorial:
-
 ---
 
 ## **Module 5: Machine Learning**
@@ -122,3 +120,231 @@ Would you like me to create detailed code samples or dive deeper into specific t
 | Linear Regression (for regression tasks) | Linear Regression                   | Linear Regression                     |
 | Multi-Layer Perceptrons (MLPs)           | Multi-Layer Perceptrons (MLPs)      | Multi-Layer Perceptrons (MLPs)        |
 --------------------------------------------------------------------------------------------------------------------------
+
+----
+
+### Tutorials for Supervised Learning Algorithms
+
+Shown here **Supervised Learning Algorithms**:
+
+1. **Linear Regression**  
+2. **Logistic Regression**  
+3. **Decision Tree**  
+4. **Support Vector Machine (SVM)**  
+5. **Naive Bayes**  
+6. **K-Nearest Neighbors (KNN)**  
+7. **Random Forest**
+
+---
+
+#### **1. Linear Regression**
+- **Objective**: Predict a continuous value.
+- **Key Idea**: Finds the best-fit line minimizing the error between predicted and actual values.  
+- **Example**: Predicting house prices based on area, location, etc.
+
+**Python Implementation**:
+```python
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+import numpy as np
+
+# Sample data
+X = np.array([[1], [2], [3], [4], [5]])
+y = np.array([3, 6, 9, 12, 15])
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("MSE:", mean_squared_error(y_test, y_pred))
+```
+
+---
+
+#### **2. Logistic Regression**
+- **Objective**: Predict categorical outcomes (e.g., binary classification).
+- **Key Idea**: Uses a sigmoid function to map outputs to probabilities.  
+- **Example**: Predicting if an email is spam or not.
+
+**Python Implementation**:
+```python
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Data
+data = load_iris()
+X, y = data.data, data.target  # Multi-class problem
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Model
+model = LogisticRegression(max_iter=200)
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```
+
+---
+
+#### **3. Decision Tree**
+- **Objective**: Classify data using a tree-like structure.
+- **Key Idea**: Splits data at each node based on the feature that provides the highest information gain.  
+- **Example**: Loan approval system.
+
+**Python Implementation**:
+```python
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Data
+data = load_iris()
+X, y = data.data, data.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Model
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```
+
+---
+
+#### **4. Support Vector Machines (SVM)**
+- **Objective**: Classify data points by finding the best separating hyperplane.
+- **Key Idea**: Maximizes the margin between classes.  
+- **Example**: Face recognition.
+
+**Python Implementation**:
+```python
+from sklearn.svm import SVC
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Data
+data = load_iris()
+X, y = data.data, data.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Model
+model = SVC(kernel='linear')
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```
+
+---
+
+#### **5. Naive Bayes**
+- **Objective**: Perform classification using Bayes' theorem.
+- **Key Idea**: Assumes independence between features.  
+- **Example**: Spam email classification.
+
+**Python Implementation**:
+```python
+from sklearn.naive_bayes import GaussianNB
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Data
+data = load_iris()
+X, y = data.data, data.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Model
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```
+
+---
+
+#### **6. K-Nearest Neighbors (KNN)**
+- **Objective**: Classify based on the majority class of neighbors.
+- **Key Idea**: Uses distance metrics like Euclidean distance.  
+- **Example**: Image recognition.
+
+**Python Implementation**:
+```python
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Data
+data = load_iris()
+X, y = data.data, data.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Model
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```
+
+---
+
+#### **7. Random Forest**
+- **Objective**: Ensemble method for classification and regression.
+- **Key Idea**: Combines multiple decision trees to improve performance.  
+- **Example**: Fraud detection in financial transactions.
+
+**Python Implementation**:
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Data
+data = load_iris()
+X, y = data.data, data.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Model
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```
+
+---
+
+Would you like more details on any specific algorithm?

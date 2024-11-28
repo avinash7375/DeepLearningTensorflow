@@ -1,6 +1,5 @@
-[28/11, 18:00] Meta AI: Here's a concise tutorial on Number and Boolean objects in JavaScript:
 
-*Number Object*
+## *Number Object*
 
 In JavaScript, numbers are primitive values, but they can also be wrapped in a Number object.
 
@@ -40,7 +39,7 @@ console.log(num.toFixed(2)); // Output: "10.50"
 console.log(num.toPrecision(3)); // Output: "10.5"
 ```
 
-*Boolean Object*
+## *Boolean Object*
 
 In JavaScript, booleans are primitive values, but they can also be wrapped in a Boolean object.
 
@@ -67,8 +66,7 @@ let bool = new Boolean(true);
 console.log(bool.valueOf()); // Output: true
 console.log(bool.toString()); // Output: "true"
 ```
-[28/11, 18:02] Meta AI: Here's a concise tutorial on String objects in JavaScript:
-
+## String
 *Creating a String Object*
 
 You can create a String object using the `String()` constructor:

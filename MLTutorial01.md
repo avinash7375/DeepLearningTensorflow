@@ -402,3 +402,146 @@ if __name__ == "__main__":
 - **Data Preprocessing:** The preprocessing pipeline is integrated into the function and modularized for flexibility.
 - **Pipeline for Training:** More professional and scalable approach with pipelines to handle preprocessing and model training together.
 - **Evaluation Metrics:** The code evaluates the model's performance with appropriate metrics (e.g
+
+
+-----
+
+To enhance the existing code with a **Random Forest** model, let's modify one of the examples (e.g., **Fraud Detection** or **Customer Churn Prediction**) to use a Random Forest instead of a decision tree or logistic regression. Random Forest is an ensemble method that aggregates the predictions from multiple decision trees, providing a more robust and generalized model.
+
+### **Random Forest: Fraud Detection**
+**Problem:** Detect fraudulent transactions based on sensor data.
+
+**Updated Code with Random Forest:**
+```python
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
+from sklearn.impute import SimpleImputer
+
+def load_data(filepath):
+    """Load transaction data."""
+    return pd.read_csv(filepath)
+
+def preprocess_data(df):
+    """Encode categorical features and handle missing values."""
+    le = LabelEncoder()
+    df['location'] = le.fit_transform(df['location'])
+    
+    # Handle missing values
+    imputer = SimpleImputer(strategy='mean')
+    df[['amount', 'location', 'time']] = imputer.fit_transform(df[['amount', 'location', 'time']])
+    
+    return df[['amount', 'location', 'time']], df['is_fraud']
+
+def train_random_forest(X_train, y_train):
+    """Train a Random Forest classifier."""
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    return model
+
+def evaluate_model(model, X_test, y_test):
+    """Evaluate model accuracy."""
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
+
+# Main execution
+if __name__ == "__main__":
+    df = load_data('transactions.csv')
+    X, y = preprocess_data(df)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = train_random_forest(X_train, y_train)
+    evaluate_model(model, X_test, y_test)
+```
+
+### **Random Forest: Customer Churn Prediction**
+**Problem:** Predict if a customer will churn (leave the service).
+
+**Updated Code with Random Forest:**
+```python
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+
+def load_and_preprocess_data(filepath):
+    """Load and preprocess customer churn data."""
+    df = pd.read_csv(filepath)
+    X = df[['age', 'tenure', 'monthly_spend']]
+    y = df['is_churned']
+    
+    # Standardize numerical features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    return X_scaled, y
+
+def train_random_forest(X_train, y_train):
+    """Train a Random Forest classifier."""
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    return model
+
+def evaluate_model(y_test, y_pred):
+    """Evaluate the model using accuracy and confusion matrix."""
+    accuracy = accuracy_score(y_test, y_pred)
+    conf_matrix = confusion_matrix(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
+    print(f"Confusion Matrix:\n{conf_matrix}")
+
+# Main execution
+if __name__ == "__main__":
+    X, y = load_and_preprocess_data('customer_churn.csv')
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = train_random_forest(X_train, y_train)
+    y_pred = model.predict(X_test)
+    evaluate_model(y_test, y_pred)
+```
+
+### Key Improvements with Random Forest:
+1. **Ensemble Learning**: Random Forest is an ensemble method that combines multiple decision trees, reducing the risk of overfitting and improving model performance.
+2. **Hyperparameter Tuning**: By using `n_estimators=100` in the `RandomForestClassifier`, we set the number of trees in the forest. This can be further fine-tuned using cross-validation.
+3. **Random State for Reproducibility**: Set `random_state=42` to ensure the results are reproducible.
+4. **Model Evaluation**: We use the **accuracy score** and **confusion matrix** to evaluate model performance.
+
+### Hyperparameter Tuning (Optional):
+You can further enhance the model performance using **GridSearchCV** for hyperparameter tuning. For example, tuning the number of trees (`n_estimators`), depth of trees (`max_depth`), and other parameters.
+
+```python
+from sklearn.model_selection import GridSearchCV
+
+# Hyperparameter grid
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [None, 10, 20],
+    'min_samples_split': [2, 5, 10]
+}
+
+# Create the model
+model = RandomForestClassifier(random_state=42)
+
+# Setup GridSearchCV
+grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, verbose=1, n_jobs=-1)
+grid_search.fit(X_train, y_train)
+
+# Best model
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+evaluate_model(y_test, y_pred)
+```
+
+---
+
+### Why Random Forest?
+
+- **Reduced Overfitting**: Random Forest mitigates the risk of overfitting (a common issue with single decision trees) by averaging multiple trees.
+- **Feature Importance**: It can be used to determine feature importance, which helps in understanding the key drivers of predictions.
+- **Robustness**: Random Forest is more robust to noisy data and works well even with missing values or slight data imbalances.
+
+This version is now more professional by making use of Random Forest, modularization, and incorporating best practices such as handling missing values, scaling, and reproducibility.

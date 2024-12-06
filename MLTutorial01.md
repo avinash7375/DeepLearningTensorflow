@@ -137,214 +137,268 @@ Shown here **Supervised Learning Algorithms**:
 
 ---
 
-#### **1. Linear Regression**
-- **Objective**: Predict a continuous value.
-- **Key Idea**: Finds the best-fit line minimizing the error between predicted and actual values.  
-- **Example**: Predicting house prices based on area, location, etc.
+To make the implementation more professional, we'll refine the structure further by following best practices for real-world machine learning projects. We'll add comments for clarity, modularize the code into functions for reusability, integrate hyperparameter tuning, improve data preprocessing, and ensure readability and maintainability. Below is a more professional approach to solving these problems:
 
-**Python Implementation**:
+---
+
+### 1. **Linear Regression: Predicting Housing Prices**
+**Problem:** Predicting housing prices based on features like area, location, and age.
+
+**Code:**
 ```python
+import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
-import numpy as np
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
 
-# Sample data
-X = np.array([[1], [2], [3], [4], [5]])
-y = np.array([3, 6, 9, 12, 15])
+def load_data(filepath):
+    """Load housing data from CSV."""
+    return pd.read_csv(filepath)
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+def preprocess_data(X):
+    """Preprocess data by encoding categorical features and imputing missing values."""
+    # Categorical feature encoding
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('location', OneHotEncoder(), ['location'])  # Encoding categorical 'location'
+        ],
+        remainder='passthrough'  # Keep other columns as they are
+    )
+    return preprocessor.fit_transform(X)
 
-# Model
-model = LinearRegression()
-model.fit(X_train, y_train)
+def build_pipeline():
+    """Build a pipeline with preprocessing and model."""
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('location', OneHotEncoder(), ['location']),
+            ('imputer', SimpleImputer(strategy='mean'), ['size', 'age'])
+        ],
+        remainder='passthrough'
+    )
 
-# Prediction
-y_pred = model.predict(X_test)
-print("MSE:", mean_squared_error(y_test, y_pred))
+    model = Pipeline(steps=[
+        ('preprocessor', preprocessor),
+        ('regressor', LinearRegression())
+    ])
+    return model
+
+def train_and_evaluate(X_train, y_train, X_test, y_test, model):
+    """Train the model and evaluate performance."""
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    print(f"Mean Squared Error: {mse:.2f}")
+    return model, mse
+
+# Main execution
+if __name__ == "__main__":
+    df = load_data('housing_data.csv')
+    X = df[['size', 'location', 'age']]
+    y = df['price']
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = build_pipeline()
+    trained_model, mse = train_and_evaluate(X_train, y_train, X_test, y_test, model)
 ```
 
 ---
 
-#### **2. Logistic Regression**
-- **Objective**: Predict categorical outcomes (e.g., binary classification).
-- **Key Idea**: Uses a sigmoid function to map outputs to probabilities.  
-- **Example**: Predicting if an email is spam or not.
+### 2. **Logistic Regression: Customer Churn Prediction**
+**Problem:** Predict if a customer will churn (leave the service).
 
-**Python Implementation**:
+**Code:**
 ```python
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.preprocessing import StandardScaler
 
-# Data
-data = load_iris()
-X, y = data.data, data.target  # Multi-class problem
+def load_and_preprocess_data(filepath):
+    """Load and preprocess customer churn data."""
+    df = pd.read_csv(filepath)
+    X = df[['age', 'tenure', 'monthly_spend']]
+    y = df['is_churned']
+    
+    # Standardize numerical features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    return X_scaled, y
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+def train_logistic_regression(X_train, y_train):
+    """Train a logistic regression model."""
+    model = LogisticRegression(max_iter=200)
+    model.fit(X_train, y_train)
+    return model
 
-# Model
-model = LogisticRegression(max_iter=200)
-model.fit(X_train, y_train)
+def evaluate_model(y_test, y_pred):
+    """Evaluate the model using accuracy and confusion matrix."""
+    accuracy = accuracy_score(y_test, y_pred)
+    conf_matrix = confusion_matrix(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
+    print(f"Confusion Matrix:\n{conf_matrix}")
 
-# Prediction
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
+# Main execution
+if __name__ == "__main__":
+    X, y = load_and_preprocess_data('customer_churn.csv')
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = train_logistic_regression(X_train, y_train)
+    y_pred = model.predict(X_test)
+    evaluate_model(y_test, y_pred)
 ```
 
 ---
 
-#### **3. Decision Tree**
-- **Objective**: Classify data using a tree-like structure.
-- **Key Idea**: Splits data at each node based on the feature that provides the highest information gain.  
-- **Example**: Loan approval system.
+### 3. **Decision Tree: Fraud Detection**
+**Problem:** Detect fraudulent transactions based on sensor data.
 
-**Python Implementation**:
+**Code:**
 ```python
+import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
 
-# Data
-data = load_iris()
-X, y = data.data, data.target
+def load_data(filepath):
+    """Load transaction data."""
+    return pd.read_csv(filepath)
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+def preprocess_data(df):
+    """Encode categorical features."""
+    le = LabelEncoder()
+    df['location'] = le.fit_transform(df['location'])
+    return df[['amount', 'location', 'time']], df['is_fraud']
 
-# Model
-model = DecisionTreeClassifier()
-model.fit(X_train, y_train)
+def train_decision_tree(X_train, y_train):
+    """Train a decision tree classifier."""
+    model = DecisionTreeClassifier(max_depth=5, random_state=42)
+    model.fit(X_train, y_train)
+    return model
 
-# Prediction
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
+def evaluate_model(model, X_test, y_test):
+    """Evaluate model accuracy."""
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
+
+# Main execution
+if __name__ == "__main__":
+    df = load_data('transactions.csv')
+    X, y = preprocess_data(df)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = train_decision_tree(X_train, y_train)
+    evaluate_model(model, X_test, y_test)
 ```
 
 ---
 
-#### **4. Support Vector Machines (SVM)**
-- **Objective**: Classify data points by finding the best separating hyperplane.
-- **Key Idea**: Maximizes the margin between classes.  
-- **Example**: Face recognition.
+### 4. **Support Vector Machine (SVM): Image Classification**
+**Problem:** Classifying clothing images using the Fashion-MNIST dataset.
 
-**Python Implementation**:
+**Code:**
 ```python
+import numpy as np
 from sklearn.svm import SVC
-from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from sklearn.decomposition import PCA
+from sklearn.datasets import fetch_openml
 
-# Data
-data = load_iris()
-X, y = data.data, data.target
+def load_and_preprocess_data():
+    """Load and preprocess Fashion-MNIST data."""
+    data = fetch_openml('fashion-mnist', version=1)
+    X = np.array(data.data)
+    y = np.array(data.target, dtype=int)
+    
+    # Apply PCA for dimensionality reduction
+    pca = PCA(n_components=50)
+    X_reduced = pca.fit_transform(X)
+    
+    return X_reduced, y
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+def train_svm(X_train, y_train):
+    """Train a support vector machine classifier."""
+    model = SVC(kernel='linear', C=1)
+    model.fit(X_train, y_train)
+    return model
 
-# Model
-model = SVC(kernel='linear')
-model.fit(X_train, y_train)
+def evaluate_model(model, X_test, y_test):
+    """Evaluate model accuracy."""
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
 
-# Prediction
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
+# Main execution
+if __name__ == "__main__":
+    X, y = load_and_preprocess_data()
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = train_svm(X_train, y_train)
+    evaluate_model(model, X_test, y_test)
 ```
 
 ---
 
-#### **5. Naive Bayes**
-- **Objective**: Perform classification using Bayes' theorem.
-- **Key Idea**: Assumes independence between features.  
-- **Example**: Spam email classification.
+### 5. **Naive Bayes: Sentiment Analysis**
+**Problem:** Classify customer reviews as positive or negative.
 
-**Python Implementation**:
+**Code:**
 ```python
-from sklearn.naive_bayes import GaussianNB
-from sklearn.datasets import load_iris
+import pandas as pd
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
 
-# Data
-data = load_iris()
-X, y = data.data, data.target
+def load_and_preprocess_data(filepath):
+    """Load and preprocess text data."""
+    df = pd.read_csv(filepath)
+    X = df['review']
+    y = df['sentiment']
+    
+    # Convert text to numerical vectors
+    vectorizer = CountVectorizer(stop_words='english')
+    X_vectorized = vectorizer.fit_transform(X)
+    
+    return X_vectorized, y
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+def train_naive_bayes(X_train, y_train):
+    """Train a Naive Bayes classifier."""
+    model = MultinomialNB()
+    model.fit(X_train, y_train)
+    return model
 
-# Model
-model = GaussianNB()
-model.fit(X_train, y_train)
+def evaluate_model(model, X_test, y_test):
+    """Evaluate model accuracy and print classification report."""
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
+    print(classification_report(y_test, y_pred))
 
-# Prediction
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
+# Main execution
+if __name__ == "__main__":
+    X, y = load_and_preprocess_data('customer_reviews.csv')
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = train_naive_bayes(X_train, y_train)
+    evaluate_model(model, X_test, y_test)
 ```
 
 ---
 
-#### **6. K-Nearest Neighbors (KNN)**
-- **Objective**: Classify based on the majority class of neighbors.
-- **Key Idea**: Uses distance metrics like Euclidean distance.  
-- **Example**: Image recognition.
+### Key Improvements:
 
-**Python Implementation**:
-```python
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-
-# Data
-data = load_iris()
-X, y = data.data, data.target
-
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-# Model
-model = KNeighborsClassifier(n_neighbors=3)
-model.fit(X_train, y_train)
-
-# Prediction
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
-```
-
----
-
-#### **7. Random Forest**
-- **Objective**: Ensemble method for classification and regression.
-- **Key Idea**: Combines multiple decision trees to improve performance.  
-- **Example**: Fraud detection in financial transactions.
-
-**Python Implementation**:
-```python
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-
-# Data
-data = load_iris()
-X, y = data.data, data.target
-
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-# Model
-model = RandomForestClassifier(n_estimators=100)
-model.fit(X_train, y_train)
-
-# Prediction
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
-```
-
----
-
-Would you like more details on any specific algorithm?
+- **Modularization:** Code is divided into clear, reusable functions like `load_data()`, `preprocess_data()`, `train_model()`, and `evaluate_model()`, making the code more maintainable and testable.
+- **Data Preprocessing:** The preprocessing pipeline is integrated into the function and modularized for flexibility.
+- **Pipeline for Training:** More professional and scalable approach with pipelines to handle preprocessing and model training together.
+- **Evaluation Metrics:** The code evaluates the model's performance with appropriate metrics (e.g

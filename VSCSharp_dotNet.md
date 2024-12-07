@@ -762,10 +762,7 @@ Your dynamic ASP.NET Core Web Application now includes:
 Let me know if you'd like to expand this with additional features such as email confirmation, user roles, or API integration!
 
 ----
-[07/12, 18:50] Avinash R. Kauran: file:```Here’s a structured C# tutorial covering beginner to intermediate levels. Each section introduces key concepts, practical examples, and suggested exercises for reinforcement.
-
-
----
+```
 
 C# Tutorials: Beginner to Intermediate
 
@@ -1025,14 +1022,12 @@ Write a program using LINQ to filter even numbers from a list.
 
 
 
----
 
 Conclusion
 
 By following this structure, you’ll progress from understanding basic concepts to writing intermediate-level programs in C#. Ensure regular practice and explore additional topics as needed. Let me know if you'd like help on any specific topic!
 
-```
-[07/12, 18:51] Avinash R. Kauran: ```Here’s an expanded tutorial to cover more advanced concepts and intermediate programming techniques in C#.
+
 
 
 ---
@@ -1413,4 +1408,3 @@ Implement a factory pattern to create different types of shapes.
 
 Would you like to dive deeper into any specific area?
 
-```
